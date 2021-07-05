@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="cs-cz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Jiří Navrátil">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no">
+    <link rel="stylesheet" href="pexeso.css">
+    <script src="https://kit.fontawesome.com/6af5dfbcd9.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="pexeso.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <title>pexeso</title>
+</head>
+
+<body>
+    <div class="pexeso">
+        <div class="box" id="box">
+            <div class="puzzl" id="main">
+                <div class="front" id="front"><i class="fab fa-font-awesome-flag"></i></div>
+                <div class="back" id="back"></div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p class="copy" id="rok"></p>
+        <script>
+            var d = new Date();
+            document.getElementById("rok").innerHTML = "© Jiří Navrátil" + " " + d.getFullYear();
+        </script>
+    </div>
+    <script>
+        let menu = document.querySelector('#main');                     //kopírovaní karet pomocí jednoto HTML zápisu 
+        for (let index = 0; index < 11; index++) {
+            let clonedMenu = menu.cloneNode(true);
+            document.getElementById("box").appendChild(clonedMenu);
+        }
+        vytvor();
+    </script>
+    <script>
+        document.querySelectorAll('.puzzl').forEach(item => {
+            item.addEventListener('click', event => {
+
+                if (item.style.transform === "rotateY(180deg)") {   //pokud hráč se snaží otočit kartu, která už je otočená => nelze
+                }
+                else if (pozice === 0) {                            //otočení první karty => zaznamenaní id do prvnikarta
+                    pozice += 1;
+                    item.style.transform = "rotateY(180deg)";
+                    prvnikarta = item.id;
+                }
+                else if (pozice === 1) {                             //otočení druhé karty => zaznamenaní id od druhakarta
+                    pozice += 1;
+                    item.style.transform = "rotateY(180deg)";
+                    druhakarta = item.id;
+
+                    if (prvnikarta === druhakarta) {                //známe ID obou otočených karet => shoda karet => ptáme se ted, ne až po dalším kliku 
+                        uhodnotepokusy++;
+                        max--;
+                        document.getElementById("odpocet").innerHTML = "zbývá " + max + "/6";
+                        resetuj();                                   //reset pozic a vypsání počet otočených karet
+                        if (uhodnotepokusy === 6) {                 // všechny karty jsou otočené => výhra 
+                            clearInterval(cass);
+                        }
+                    }
+                }
+                else if (prvnikarta != druhakarta) {                          // po kliku se neshodující karty otočí    
+                    resetuj();
+                    var doc = document.getElementsByClassName("puzzl");
+                    for (let index = 0; index < doc.length; index++) {
+                        if (doc[index].id === prvnikarta || doc[index].id === druhakarta) {     //založeno na stejných ID 
+                            doc[index].style.transform = "rotate(0deg)";
+                        }
+                    }
+                }
+            })
+        })
+    </script>
+    <script>
+        window.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        }, false);
+        document.addEventListener("keydown", function (e) {
+            //document.onkeydown = function(e) {
+            // "I" key
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+                disabledEvent(e);
+            }
+            // "J" key
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+                disabledEvent(e);
+            }
+            // "S" key + macOS
+            if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                disabledEvent(e);
+            }
+            // "U" key
+            if (e.ctrlKey && e.keyCode == 85) {
+                disabledEvent(e);
+            }
+            // "F12" key
+            /*     if (event.keyCode == 123) {
+                     disabledEvent(e);
+                 }*/
+        }, false);
+        function disabledEvent(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            } else if (window.event) {
+                window.event.cancelBubble = true;
+            }
+            e.preventDefault();
+            return false;
+        }
+
+    </script>
+</body>
+
+</html>
