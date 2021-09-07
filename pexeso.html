@@ -74,6 +74,9 @@
                             doc[index].style.transform = "rotate(0deg)";
                         }
                     }
+                    pozice += 1;
+                    item.style.transform = "rotateY(180deg)";
+                    prvnikarta = item.id;
                 }
             })
         })
@@ -101,9 +104,9 @@
                 disabledEvent(e);
             }
             // "F12" key
-            if (event.keyCode == 123) {
-                disabledEvent(e);
-            }
+            /*  if (event.keyCode == 123) {
+                  disabledEvent(e);
+              }*/
         }, false);
         function disabledEvent(e) {
             if (e.stopPropagation) {
