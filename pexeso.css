@@ -72,10 +72,10 @@ body {
     background: none;
 }
 .back i {
-    position: absolute;
-    top: 50%;
-    left:50%;
-    transform: translate(-50%,-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
     color:white;
     font-size: 45px;
 }
